@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개발자 포트폴리오 (단일 파일)</title>
+  <style>
+    /* ====== 스타일 (styles.css 내장) ====== */
+    :root{
+      --maxw: 980px;
+      --gap: 1rem;
+      --radius: 12px;
+      --shadow: 0 6px 16px rgba(0,0,0,.08);
+      --border: 1px solid #e6e6e6;
+      --text: #222;
+      --muted: #666;
+      --bg: #fff;
+      --bg-soft: #f7f7f8;
+      --primary: #1a73e8;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg-soft);
+      line-height: 1.6;
+    }
+    a{ color: var(--primary); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .container{ max-width: var(--maxw); margin: 0 auto; padding: 1.25rem; }
+
+    /* 헤더/푸터 */
+    .site-header, .site-footer{ background: var(--bg); }
+    .site-header{ position: sticky; top: 0; z-index: 10; border-bottom: var(--border); box-shadow: var(--shadow); }
+    .site-footer{ border-top: var(--border); text-align:center; padding: 1rem; }
+
+    .site-header .brand{ display:flex; align-items:center; gap:.5rem; padding:.75rem 1.25rem; }
+    .logo{
+      display:inline-flex; width:32px; height:32px; border-radius:8px;
+      background:#111; color:#fff; align-items:center; justify-content:center; font-weight:700;
+    }
+    .brand-text{ font-weight:600; }
+
+    .site-nav{ display:flex; gap:.5rem; padding:0 1.25rem 1rem; flex-wrap:wrap; }
+    .site-nav a{ padding:.5rem .75rem; border-radius:8px; }
+    .site-nav a.active, .site-nav a:hover{ background:#e9f1ff; }
+
+    /* 섹션/블록 */
+    section{ margin:1.25rem 0; }
+    .hero{
+      display:grid; grid-template-columns:120px 1fr; gap:1rem; align-items:center;
+      background:var(--bg); border:var(--border); border-radius:var(--radius);
+      padding:1.25rem; box-shadow:var(--shadow); margin-top:1rem;
+    }
+    .avatar{ width:100%; border-radius:50%; border:var(--border); background:#fff; }
+    .lead{ font-size:1.05rem; color:var(--muted); margin-top:.25rem; }
+    .quick-links{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.75rem; }
+    .btn{ display:inline-block; padding:.5rem .9rem; border-radius:10px; background:var(--primary); color:#fff; border:0; cursor:pointer; }
+    .btn:hover{ filter:brightness(.95); }
+    .btn.btn-secondary{ background:#333; }
+
+    .toc{
+      background:var(--bg); border:var(--border); border-radius:var(--radius);
+      padding:1rem; box-shadow:var(--shadow);
+    }
+    .key-value{
+      list-style:none; padding:0; margin:0;
+      display:grid; grid-template-columns:150px 1fr; gap:.5rem 1rem;
+      background:var(--bg); border:var(--border); border-radius:var(--radius);
+      padding:1rem; box-shadow:var(--shadow);
+    }
+    .key-value li{ display:contents; }
+    .key-value strong{ text-align:right; color:#444; }
+    .links{ list-style:none; padding:0; }
+    .links li{ margin:.35rem 0; }
+    .timeline-item{
+      background:var(--bg); border:var(--border); border-radius:var(--radius);
+      padding:1rem; box-shadow:var(--shadow); margin:.75rem 0;
+    }
+    .back-to-top{ text-align:right; margin:2rem 0 1rem; }
+    .muted{ color:var(--muted); }
+
+    /* 프로젝트 카드/검색 */
+    .page-head{ display:flex; gap:1rem; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    #search{ padding:.55rem .75rem; border-radius:10px; border:1px solid #cfd4dc; min-width:240px; }
+    .filter{ margin:.5rem 0 1rem; }
+    .chips{ display:flex; gap:.5rem; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex; align-items:center; gap:.25rem;
+      padding:.35rem .6rem; border-radius:999px; background:#eef2ff;
+      border:1px solid #d9e2ff; font-size:.9rem; cursor:pointer;
+    }
+    .chip:focus{ outline:2px solid var(--primary); outline-offset:2px; }
+
+    .cards{ list-style:none; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; }
+    .card{ background:var(--bg); border:var(--border); border-radius:var(--radius); padding:1rem; box-shadow:var(--shadow); }
+    .card-head{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+    .badge{ padding:.25rem .5rem; border-radius:6px; background:#e9f1ff; border:1px solid #d7e6ff; font-size:.8rem; }
+    .bullets{ margin:.5rem 0 .75rem; }
+    .meta{ display:grid; grid-template-columns:60px 1fr; gap:.25rem .75rem; font-size:.95rem; }
+    .local-toc{ margin:1.25rem 0; display:flex; gap:.75rem; align-items:center; }
+
+    /* 접근성 보조 */
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); border:0;
+    }
+
+    /* 반응형 */
+    @media (max-width:640px){
+      .hero{ grid-template-columns:1fr; text-align:center; }
+      .key-value{ grid-template-columns:1fr; }
+      .key-value strong{ text-align:left; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a href="#top" class="logo" aria-label="홈으로">림</a>
+      <span class="brand-text">개발자 포트폴리오</span>
+    </div>
+    <nav class="site-nav" aria-label="주요">
+      <a href="#intro" class="active">소개</a>
+      <a href="#projects">포트폴리오</a>
+      <a href="#contact">연락처</a>
+    </nav>
+  </header>
+
+  <main id="top" class="container">
+    <!-- 소개 -->
+    <section id="intro" class="hero" aria-labelledby="intro-heading">
+      <img class="avatar" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><rect width='100%25' height='100%25' fill='%23EFEFEF'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='22' fill='%23999'>Your Photo</text></svg>" alt="프로필 아바타" />
+      <div>
+        <h1 id="intro-heading">[당신의 이름] – 프론트엔드/백엔드/풀스택 개발자</h1>
+        <p class="lead">문제를 구조화하고, 사용자 경험을 개선하는 것을 좋아합니다. 깔끔한 코드와 팀 협업을 중시합니다.</p>
+        <div class="quick-links">
+          <a href="#toc" class="btn">목차 바로가기</a>
+          <a href="#projects" class="btn btn-secondary">프로젝트 보러가기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 목차 -->
+    <section id="toc" aria-labelledby="toc-heading">
+      <h2 id="toc-heading">목차</h2>
+      <ol class="toc">
+        <li><a href="#about">기본 정보</a></li>
+        <li><a href="#skills">보유 기술</a></li>
+        <li><a href="#experience">경력 요약</a></li>
+        <li><a href="#education">학력</a></li>
+        <li><a href="#projects">포트폴리오</a></li>
+        <li><a href="#contact">연락처</a></li>
+      </ol>
+    </section>
+
+    <!-- 기본 정보 -->
+    <section id="about" aria-labelledby="about-heading">
+      <h2 id="about-heading">기본 정보</h2>
+      <ul class="key-value">
+        <li><strong>이름</strong><span>[당신의 이름]</span></li>
+        <li><strong>직무</strong><span>[예: 프론트엔드 개발자]</span></li>
+        <li><strong>관심사</strong><span>웹 접근성, 성능 최적화, 클린 아키텍처</span></li>
+        <li><strong>거주지</strong><span>서울, 대한민국</span></li>
+        <li><strong>언어</strong><span>한국어, 영어</span></li>
+      </ul>
+    </section>
+
+    <!-- 기술 -->
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading">보유 기술</h2>
+      <div class="chips" role="list">
+        <span class="chip" role="listitem">HTML</span>
+        <span class="chip" role="listitem">CSS</span>
+        <span class="chip" role="listitem">JavaScript</span>
+        <span class="chip" role="listitem">TypeScript</span>
+        <span class="chip" role="listitem">React</span>
+        <span class="chip" role="listitem">Node.js</span>
+        <span class="chip" role="listitem">REST</span>
+        <span class="chip" role="listitem">SQL</span>
+        <span class="chip" role="listitem">Git</span>
+        <span class="chip" role="listitem">CI/CD</span>
+      </div>
+      <p class="muted">※ 아래 포트폴리오 섹션에서 각 기술이 사용된 프로젝트를 확인할 수 있습니다.</p>
+    </section>
+
+    <!-- 경력 -->
+    <section id="experience" aria-labelledby="exp-heading">
+      <h2 id="exp-heading">경력 요약</h2>
+      <article class="timeline-item">
+        <h3>회사 A – 소프트웨어 엔지니어 <span class="muted">2023.01 – 현재</span></h3>
+        <ul>
+          <li>디자인 시스템 구축 및 컴포넌트 30% 재사용성 향상</li>
+          <li>번들 최적화로 LCP 2.8s → 1.9s 개선</li>
+        </ul>
+      </article>
+      <article class="timeline-item">
+        <h3>회사 B – 인턴 <span class="muted">2022.07 – 2022.12</span></h3>
+        <ul>
+          <li>사내 대시보드 SPA 마이그레이션 지원</li>
+          <li>테스트 자동화 파이프라인 PoC</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- 학력 -->
+    <section id="education" aria-labelledby="edu-heading">
+      <h2 id="edu-heading">학력</h2>
+      <p>[학교명], [전공], [재학 기간/졸업]</p>
+    </section>
+
+    <!-- 포트폴리오 -->
+    <section id="projects" aria-labelledby="portfolio-heading">
+      <div class="page-head">
+        <h2 id="portfolio-heading">프로젝트 모음</h2>
+        <form id="search-form" role="search" aria-label="프로젝트 검색">
+          <label for="search" class="sr-only">검색</label>
+          <input id="search" name="q" type="search" placeholder="키워드, 기술명으로 검색" autocomplete="off" />
+          <button class="btn" type="submit">검색</button>
+        </form>
+      </div>
+
+      <details class="filter" aria-label="빠른 링크">
+        <summary>빠른 링크 / 태그</summary>
+        <div class="chips">
+          <button class="chip" data-filter="react" type="button">React</button>
+          <button class="chip" data-filter="node" type="button">Node</button>
+          <button class="chip" data-filter="sql" type="button">SQL</button>
+          <button class="chip" data-filter="a11y" type="button">접근성</button>
+          <button class="chip" data-filter="performance" type="button">성능</button>
+          <button class="chip" data-filter="all" type="button">전체</button>
+        </div>
+      </details>
+
+      <ol class="cards" id="project-list">
+        <li class="card" data-tags="react a11y performance" data-title="전자상거래 프론트 성능 최적화">
+          <div class="card-head">
+            <h3>전자상거래 프론트 성능 최적화</h3>
+            <span class="badge">React</span>
+          </div>
+          <p class="muted">LCP 2.8s → 1.9s, CLS 0.18 → 0.05</p>
+          <ul class="bullets">
+            <li>이미지 lazy-loading, 코드 스플리팅, preconnect 적용</li>
+            <li>Core Web Vitals 모니터링 대시보드 구축</li>
+            <li><a href="#" aria-disabled="true">데모(사내용)</a> · <a href="https://github.com/your-id/shop-opt" target="_blank" rel="noopener">코드</a></li>
+          </ul>
+          <dl class="meta">
+            <dt>역할</dt><dd>프론트엔드 리드</dd>
+            <dt>기간</dt><dd>2024.03 – 2024.08</dd>
+            <dt>기술</dt><dd>React, Vite, Webpack, Lighthouse</dd>
+          </dl>
+        </li>
+
+        <li class="card" data-tags="node sql api" data-title="주문 관리 백엔드 API">
+          <div class="card-head">
+            <h3>주문 관리 백엔드 API</h3>
+            <span class="badge">Node</span>
+          </div>
+          <p class="muted">주문 처리 지연 35% 감소</p>
+          <ul class="bullets">
+            <li>Express 기반 REST API 및 JWT 인증</li>
+            <li>트랜잭션/인덱스 최적화로 쿼리 40% 단축</li>
+            <li><a href="#" aria-disabled="true">API 문서</a> · <a href="https://github.com/your-id/order-api" target="_blank" rel="noopener">코드</a></li>
+          </ul>
+          <dl class="meta">
+            <dt>역할</dt><dd>백엔드 개발</dd>
+            <dt>기간</dt><dd>2023.09 – 2024.01</dd>
+            <dt>기술</dt><dd>Node.js, Express, PostgreSQL, Docker</dd>
+          </dl>
+        </li>
+
+        <li class="card" data-tags="react a11y" data-title="디자인 시스템 컴포넌트">
+          <div class="card-head">
+            <h3>디자인 시스템 컴포넌트</h3>
+            <span class="badge">접근성</span>
+          </div>
+          <p class="muted">재사용성 향상, 문서화 자동화</p>
+          <ul class="bullets">
+            <li>ARIA 패턴 준수, 키보드 내비게이션 지원</li>
+            <li>Storybook + 자동 스냅샷 테스트</li>
+            <li><a href="https://your-design-system.example.com" target="_blank" rel="noopener">문서</a></li>
+          </ul>
+          <dl class="meta">
+            <dt>역할</dt><dd>컴포넌트 설계/개발</dd>
+            <dt>기간</dt><dd>2023.03 – 2023.12</dd>
+            <dt>기술</dt><dd>React, TypeScript, Storybook, Jest</dd>
+          </dl>
+        </li>
+
+        <li class="card" data-tags="side react performance" data-title="사이드 프로젝트: 독서 기록 앱">
+          <div class="card-head">
+            <h3>사이드 프로젝트: 독서 기록 앱</h3>
+            <span class="badge">Side</span>
+          </div>
+          <p class="muted">PWA, 오프라인 동기화</p>
+          <ul class="bullets">
+            <li>IndexedDB 캐시, Service Worker</li>
+            <li>모바일 퍼스트 UI</li>
+            <li><a href="https://your-demo.example.com" target="_blank" rel="noopener">데모</a> · <a href="https://github.com/your-id/reading-pwa" target="_blank" rel="noopener">코드</a></li>
+          </ul>
+          <dl class="meta">
+            <dt>역할</dt><dd>개발/디자인</dd>
+            <dt>기간</dt><dd>2022.10 – 2023.02</dd>
+            <dt>기술</dt><dd>React, Workbox, IndexedDB</dd>
+          </dl>
+        </li>
+      </ol>
+
+      <nav class="local-toc" aria-label="이 페이지 목차">
+        <strong>빠른 이동:</strong>
+        <a href="#top">맨 위로</a>
+        <a href="#contact">연락처</a>
+      </nav>
+    </section>
+
+    <!-- 연락처 -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">연락처</h2>
+      <ul class="links">
+        <li><a href="mailto:your.email@example.com">your.email@example.com</a></li>
+        <li><a href="tel:+821012345678">+82-10-1234-5678</a></li>
+        <li><a href="https://github.com/your-id" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/your-id" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </section>
+
+    <p class="back-to-top"><a href="#top" aria-label="맨 위로">▲ 맨 위로</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <small>&copy; <span id="year"></span> [당신의 이름]. All rights reserved.</small>
+  </footer>
+
+  <script>
+    // ====== 스크립트 (script.js 내장) ======
+    // 연도 자동
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 간단한 검색/필터 기능
+    (function(){
+      const list = document.getElementById('project-list');
+      const searchInput = document.getElementById('search');
+      const form = document.getElementById('search-form');
+      const chips = document.querySelectorAll('.chip[data-filter]');
+
+      function normalize(s){ return (s || '').toLowerCase().trim(); }
+
+      function filterProjects(q){
+        const terms = normalize(q).split(/\s+/).filter(Boolean);
+        const items = list.querySelectorAll('.card');
+        items.forEach(li => {
+          const title = li.getAttribute('data-title') || '';
+          const tags = li.getAttribute('data-tags') || '';
+          const hay = (title + ' ' + tags + ' ' + li.textContent).toLowerCase();
+          const ok = terms.length === 0 || terms.every(t => hay.includes(t));
+          li.style.display = ok ? '' : 'none';
+        });
+      }
+
+      form?.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        filterProjects(searchInput.value);
+      });
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', ()=>{
+          const t = chip.dataset.filter;
+          if(t === 'all'){ searchInput.value=''; filterProjects(''); return; }
+          searchInput.value = t;
+          filterProjects(t);
+          searchInput.focus();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

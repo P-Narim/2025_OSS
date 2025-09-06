@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jumbotron Example</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #212529; 
+      color: #fff;
+    }
+
+    .navbar {
+      padding: 1rem;
+      border-bottom: 1px solid #444;
+    }
+
+    .navbar h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .jumbotron {
+      background-color: #2b3035;
+      padding: 2rem;
+      margin: 2rem;
+      border-radius: 10px;
+    }
+
+    .jumbotron h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .jumbotron p {
+      font-size: 1rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #555;
+    }
+
+    .btn-outline:hover {
+      background: #333;
+      color: white;
+    }
+
+    .row {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem;
+    }
+
+    .col {
+      flex: 1;
+      background-color: #2b3035;
+      padding: 1.5rem;
+      border-radius: 10px;
+    }
+
+    .col h3 {
+      margin-top: 0;
+    }
+
+    .footer {
+      text-align: center;
+      border-top: 1px solid #444;
+      padding: 1rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h1>📘 Jumbotron example</h1>
+  </div>
+
+  <div class="jumbotron">
+    <h2>Custom jumbotron</h2>
+    <p>
+      Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap.
+      Check out the examples below for how you can remix and restyle it to your liking.
+    </p>
+    <a href="#" class="btn btn-primary">Example button</a>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <h3>Change the background</h3>
+      <p>
+        Swap the background-color utility and add a <code>.text-*</code> color utility to mix up the jumbotron look.
+        Then, mix and match with additional component themes and more.
+      </p>
+      <a href="#" class="btn btn-outline">Example button</a>
+    </div>
+    <div class="col">
+      <h3>Add borders</h3>
+      <p>
+        Or, keep it light and add a border for some added definition to the boundaries of your content.
+        Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing
+        of both column's content for equal-height.
+      </p>
+      <a href="#" class="btn btn-outline">Example button</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025
+  </div>
+
+</body>
+</html>
